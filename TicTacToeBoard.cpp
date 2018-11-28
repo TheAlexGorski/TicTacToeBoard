@@ -8,6 +8,9 @@
 TicTacToeBoard::TicTacToeBoard()
 {
   turn = X;
+  turnNum = 0;
+  gameOver = false;
+  maxTurns = BOARDSIZE*BOARDSIZE;
   for(int i=0; i<BOARDSIZE; i++)
     for(int j=0; j<BOARDSIZE; j++)
       board[i][j] = Blank;
@@ -19,7 +22,14 @@ TicTacToeBoard::TicTacToeBoard()
 **/
 Piece TicTacToeBoard::toggleTurn()
 {
-  return Invalid;
+  if (turn == X)
+    turn = O;
+  else
+    turn = X;
+  turnNum++;
+  if (turnNum >= maxTurns - 1)
+    gameOver = true;
+  return turn;
 }
 
 /**
@@ -33,7 +43,15 @@ Piece TicTacToeBoard::toggleTurn()
 **/ 
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
-  return Invalid;
+  Piece placed = getPiece(row, column);
+  if (placed != Blank)
+    return placed;
+  if (!gameOver)
+  {
+    board[row][column] = turn;
+    toggleTurn();
+  }
+  return board[row][column];
 }
 
 /**
@@ -42,7 +60,9 @@ Piece TicTacToeBoard::placePiece(int row, int column)
 **/
 Piece TicTacToeBoard::getPiece(int row, int column)
 {
-  return Invalid;
+  if ((row < 0 || row >= BOARDSIZE) || (column < 0 || column >= BOARDSIZE))
+    return Invalid;
+  return board[row][column];
 }
 
 /**
@@ -51,5 +71,53 @@ Piece TicTacToeBoard::getPiece(int row, int column)
 **/
 Piece TicTacToeBoard::getWinner()
 {
-  return Invalid;
+  if (!gameOver)
+    return Invalid;
+  for (int i = 0; i < BOARDSIZE; i++)
+  {
+    int xCount = 0;
+    int oCount = 0;
+    for (int j = 0; j < BOARDSIZE; j++)
+    {
+      if (board[i][j] == X)
+        xCount++;
+      else
+        oCount++;
+    }
+    if (xCount == BOARDSIZE)
+      return X;
+    if (oCount == BOARDSIZE)
+      return O;
+  }
+  for (int i = 0; i < BOARDSIZE; i++)
+  {
+    int xCount = 0;
+    int oCount = 0;
+    for (int j = 0; j < BOARDSIZE; j++)
+    {
+      if (board[j][i] == X)
+        xCount++;
+      else
+        oCount++;
+    }
+    if (xCount == BOARDSIZE)
+      return X;
+    if (oCount == BOARDSIZE)
+      return O;
+  }
+  for (int i = 0; i < BOARDSIZE; i++)
+  {
+    int xCount = 0;
+    int oCount = 0;
+      if (board[i][i] == X)
+        xCount++;
+      else
+        oCount++;
+  }
+  if (xCount == BOARDSIZE)
+    return X;
+  if (oCount == BOARDSIZE)
+    return O;
+  }
+  return Blank;
 }
