@@ -105,10 +105,10 @@ Piece TicTacToeBoard::getWinner()
     if (oCount == BOARDSIZE)
       return O;
   }
+  int xCount = 0;
+  int oCount = 0;
   for (int i = 0; i < BOARDSIZE; i++)
   {
-    int xCount = 0;
-    int oCount = 0;
       if (board[i][i] == X)
         xCount++;
       else
@@ -118,6 +118,5 @@ Piece TicTacToeBoard::getWinner()
     return X;
   if (oCount == BOARDSIZE)
     return O;
-  }
   return Blank;
 }
